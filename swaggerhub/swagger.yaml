@@ -211,30 +211,40 @@ components:
           format: uuid
         date:
           type: string
+          description: Дата и время заказа
           format: date-time
         status:
           type: string
+          description: Статус Заказа
         client:
           type: string
+          description: "UUID клиента, поле Партнёр."
           format: uuid
-        partner:
+        contractor:
           type: string
+          description: UUID контрагента
           format: uuid
         agreement:
           type: string
+          description: UUID соглашения
           format: uuid
         subdivision:
           type: string
+          description: UUID подразделения
           format: uuid
         comment:
           type: string
+          description: Комментарий
         statusB2b:
           type: string
+          description: "Статус B2B, поле Б_СтатусЗаказаB2B в 1С"
         сurrency:
           type: string
-          example: рубль
+          description: Валюта
+          example: руб.
         contact:
           type: string
+          description: UUID Контакта
           format: uuid
         manager:
           type: string
@@ -244,6 +254,7 @@ components:
           format: uuid
         agreementDate:
           type: string
+          description: Дата согласования
           format: date-time
         total:
           type: integer
