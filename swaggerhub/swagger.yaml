@@ -112,6 +112,7 @@ components:
       properties:
         value:
           type: integer
+          description: Цена
         type:
           type: string
           description: Вид цены 1С (UUID Ссылки)
@@ -152,8 +153,10 @@ components:
       properties:
         percentage:
           type: integer
+          description: Процент скидки
         amount:
           type: integer
+          description: Сумма скидки
     OrderProduct:
       type: object
       properties:
@@ -162,27 +165,37 @@ components:
           description: Идентификатор строки
         status:
           type: string
+          description: Статус заказа 1С
         nomenclature:
           type: string
+          description: Уникальный идентификатор номенклатуры
           format: uuid
         stock:
           type: string
+          description: Уникальный идентификатор склада
           format: uuid
         shippingDate:
           type: string
+          description: Дата отправки
           format: date-time
         quantity:
           type: integer
+          description: Количество
         unit:
           type: string
+          description: Единица измерения
         total:
           type: integer
+          description: Сумма
         deliveryPrice:
           type: integer
+          description: Стоимость доставки
         totalWithoutDelivery:
           type: integer
-        discard:
+          description: Сумма без учёта доставки
+        discarded:
           type: boolean
+          description: Отменено
         vat:
           $ref: '#/components/schemas/ProductVat'
         price:
