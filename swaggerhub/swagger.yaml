@@ -1,0 +1,266 @@
+openapi: 3.0.0
+info:
+  title: Синхронизация заказов меджу 1C и b2b порталом
+  description: 1C синхронизация заказов
+  contact:
+    email: you@your-company.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  version: 1.0.0
+servers:
+- url: https://virtserver.swaggerhub.com/Insei/1C-b2b-orders-sync/1.0.0
+  description: SwaggerHub API Auto Mocking
+- url: https://dmitriy.eac-7.ru/maps_back/hs/b2b
+  description: Dmitriy DEV
+- url: https://testoff.docke.ru/DEV_test_http/hs/b2b
+  description: DEV SERVER FOR B2B
+tags:
+- name: orders-sync
+  description: Синхронизация заказов
+paths:
+  /orders-events/get-unprocessed:
+    get:
+      tags:
+      - orders-sync
+      summary: Получить все необработанные события заказов
+      description: "Возвращает все обновления заказов, которые не были обработаны\
+        \ b2b системой.\n"
+      operationId: orders-events-get-unprocessed
+      responses:
+        "200":
+          description: OK.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/EventsOrdersGetResponse'
+        default:
+          description: Server error.
+  /orders-events/send-processed:
+    post:
+      tags:
+      - orders-sync
+      summary: "Отправить UUID'ы событий заказов, что были обработаны."
+      description: "Отправить id событий, что были успешно обработаны.\n"
+      operationId: orders-events-send-processed
+      requestBody:
+        description: Массив UUID'ов событий.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EventsOrdersProcessedRequest'
+        required: true
+      responses:
+        "200":
+          description: OK.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/NoDataResponse'
+        default:
+          description: Server error.
+  /orders-events/process:
+    post:
+      tags:
+      - orders-sync
+      summary: Обработать новое событие заказа.
+      description: |
+        Обработать новое событие заказа.
+      operationId: orders-events-process
+      requestBody:
+        description: Событие заказа.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrderSnapshotEvent'
+        required: true
+      responses:
+        "200":
+          description: OK.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/NoDataResponse'
+        default:
+          description: Server error.
+components:
+  schemas:
+    Status:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: "0 - if success, other value - fail."
+          example: 0
+        messages:
+          type: array
+          items:
+            type: string
+    NoDataResponse:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/Status'
+    Address:
+      properties:
+        id:
+          type: string
+          description: UUID адреса доставки в 1С
+          format: uuid
+        address_str:
+          type: string
+          description: Текстовое представление адреса доставки в 1С
+    Delivery:
+      properties:
+        type:
+          type: string
+          description: UUID способа доставки в 1С
+          format: uuid
+        desiredShipDate:
+          type: string
+          format: date-time
+        address:
+          $ref: '#/components/schemas/Address'
+    ProductDiscount:
+      type: object
+      properties:
+        autoPercentage:
+          type: integer
+        autoAmount:
+          type: integer
+        manualPercentage:
+          type: integer
+        manualAmount:
+          type: integer
+    OrderProduct:
+      type: object
+      properties:
+        id:
+          type: integer
+          description: Идентификатор строки
+        status:
+          type: string
+        nomenclature:
+          type: string
+          format: uuid
+        stock:
+          type: string
+          format: uuid
+        shippingDate:
+          type: string
+          format: date-time
+        quantity:
+          type: integer
+        unit:
+          type: string
+        priceType:
+          type: string
+          format: uuid
+        price:
+          type: integer
+        total:
+          type: integer
+        vat:
+          type: integer
+        vatAmount:
+          type: integer
+        deliveryPrice:
+          type: integer
+        totalWithoutDelivery:
+          type: integer
+        discard:
+          type: boolean
+        discount:
+          $ref: '#/components/schemas/ProductDiscount'
+    Order:
+      type: object
+      properties:
+        id:
+          type: string
+          description: UUID заказа
+          format: uuid
+        date:
+          type: string
+          format: date-time
+        status:
+          type: string
+        client:
+          type: string
+          format: uuid
+        partner:
+          type: string
+          format: uuid
+        agreement:
+          type: string
+          format: uuid
+        subdivision:
+          type: string
+          format: uuid
+        comment:
+          type: string
+        statusB2b:
+          type: string
+        сurrency:
+          type: string
+          example: рубль
+        contact:
+          type: string
+          format: uuid
+        manager:
+          type: string
+          format: uuid
+        contactManager:
+          type: string
+          format: uuid
+        agreementDate:
+          type: string
+          format: date-time
+        total:
+          type: integer
+        delivery:
+          $ref: '#/components/schemas/Delivery'
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderProduct'
+    OrderSnapshotEvent:
+      required:
+      - date
+      - id
+      - order
+      - type
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        type:
+          type: string
+          description: "Может быть \"update\", \"remove\", \"create\""
+          example: update
+        date:
+          type: string
+          format: date-time
+        order:
+          $ref: '#/components/schemas/Order'
+    EventsOrdersProcessedRequest:
+      type: array
+      items:
+        type: string
+        format: uuid
+    EventsOrdersGetResponse:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/Status'
+        data:
+          type: array
+          nullable: true
+          items:
+            $ref: '#/components/schemas/OrderSnapshotEvent'
