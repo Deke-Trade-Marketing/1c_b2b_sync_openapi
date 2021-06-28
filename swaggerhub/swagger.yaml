@@ -150,13 +150,9 @@ components:
     ProductDiscount:
       type: object
       properties:
-        autoPercentage:
+        percentage:
           type: integer
-        autoAmount:
-          type: integer
-        manualPercentage:
-          type: integer
-        manualAmount:
+        amount:
           type: integer
     OrderProduct:
       type: object
@@ -185,14 +181,14 @@ components:
           type: integer
         totalWithoutDelivery:
           type: integer
-        discarded:
+        discard:
           type: boolean
         vat:
           $ref: '#/components/schemas/ProductVat'
         price:
           $ref: '#/components/schemas/ProductPrice'
         discount:
-          $ref: '#/components/schemas/ProductDiscount'
+          $ref: '#/components/schemas/OrderProduct_discount'
     Order:
       type: object
       properties:
@@ -279,3 +275,10 @@ components:
           nullable: true
           items:
             $ref: '#/components/schemas/OrderSnapshotEvent'
+    OrderProduct_discount:
+      type: object
+      properties:
+        auto:
+          $ref: '#/components/schemas/ProductDiscount'
+        manual:
+          $ref: '#/components/schemas/ProductDiscount'
