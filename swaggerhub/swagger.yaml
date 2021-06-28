@@ -116,6 +116,15 @@ components:
           type: string
           description: Вид цены 1С (UUID Ссылки)
           format: uuid
+    ProductVat:
+      type: object
+      properties:
+        rate:
+          type: integer
+          description: Ставка НДС
+        amount:
+          type: integer
+          description: Сумма НДС
     Address:
       type: object
       properties:
@@ -172,16 +181,14 @@ components:
           type: string
         total:
           type: integer
-        vat:
-          type: integer
-        vatAmount:
-          type: integer
         deliveryPrice:
           type: integer
         totalWithoutDelivery:
           type: integer
         discard:
           type: boolean
+        vat:
+          $ref: '#/components/schemas/ProductVat'
         price:
           $ref: '#/components/schemas/ProductPrice'
         discount:
