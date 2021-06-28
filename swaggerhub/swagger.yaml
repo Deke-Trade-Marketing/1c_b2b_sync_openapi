@@ -107,7 +107,17 @@ components:
       properties:
         status:
           $ref: '#/components/schemas/Status'
+    ProductPrice:
+      type: object
+      properties:
+        value:
+          type: integer
+        type:
+          type: string
+          description: Вид цены 1С (UUID Ссылки)
+          format: uuid
     Address:
+      type: object
       properties:
         id:
           type: string
@@ -117,6 +127,7 @@ components:
           type: string
           description: Текстовое представление адреса доставки в 1С
     Delivery:
+      type: object
       properties:
         type:
           type: string
@@ -159,11 +170,6 @@ components:
           type: integer
         unit:
           type: string
-        priceType:
-          type: string
-          format: uuid
-        price:
-          type: integer
         total:
           type: integer
         vat:
@@ -176,6 +182,8 @@ components:
           type: integer
         discard:
           type: boolean
+        price:
+          $ref: '#/components/schemas/ProductPrice'
         discount:
           $ref: '#/components/schemas/ProductDiscount'
     Order:
