@@ -185,7 +185,7 @@ components:
           type: integer
         totalWithoutDelivery:
           type: integer
-        discard:
+        discarded:
           type: boolean
         vat:
           $ref: '#/components/schemas/ProductVat'
