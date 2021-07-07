@@ -179,7 +179,8 @@ components:
           description: Количество
         unit:
           type: string
-          description: Единица измерения
+          description: Единица измерения (UUID)
+          format: uuid
         total:
           type: integer
           description: Сумма
