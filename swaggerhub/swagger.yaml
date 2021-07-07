@@ -141,8 +141,7 @@ components:
       properties:
         type:
           type: string
-          description: UUID способа доставки в 1С
-          format: uuid
+          description: Способ доставки в 1С строкой
         desiredShipDate:
           type: string
           format: date-time
