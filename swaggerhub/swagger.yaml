@@ -177,6 +177,9 @@ components:
         quantity:
           type: integer
           description: Количество
+        unitQuantity:
+          type: integer
+          description: Количество упаковок
         unit:
           type: string
           description: Единица измерения (UUID)
