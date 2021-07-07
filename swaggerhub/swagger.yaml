@@ -11,7 +11,7 @@ info:
 servers:
 - url: https://virtserver.swaggerhub.com/Insei/1C-b2b-orders-sync/1.0.0
   description: SwaggerHub API Auto Mocking
-- url: https://dmitriy.eac-7.ru/maps_back/hs/b2b
+- url: https://c6140c9e5dcd.sn.mynetname.net/maps_back/hs/b2b
   description: Dmitriy DEV
 - url: https://testoff.docke.ru/DEV_test_http/hs/b2b
   description: DEV SERVER FOR B2B
