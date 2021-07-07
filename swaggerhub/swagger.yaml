@@ -162,9 +162,6 @@ components:
         id:
           type: integer
           description: Идентификатор строки
-        status:
-          type: string
-          description: Статус заказа 1С
         nomenclature:
           type: string
           description: Уникальный идентификатор номенклатуры
