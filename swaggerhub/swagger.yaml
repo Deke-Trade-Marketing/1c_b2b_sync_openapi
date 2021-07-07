@@ -121,8 +121,8 @@ components:
       type: object
       properties:
         rate:
-          type: integer
-          description: Ставка НДС
+          type: string
+          description: "Ставка НДС, читаемый строковый идентификатор"
         amount:
           type: integer
           description: Сумма НДС
