@@ -18,6 +18,8 @@ servers:
 tags:
 - name: orders-sync
   description: Синхронизация заказов
+- name: client-price
+  description: Цены клиента
 paths:
   /orders-events/get-unprocessed:
     get:
@@ -87,6 +89,32 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/NoDataResponse'
+        default:
+          description: Server error.
+  /client-price/get:
+    post:
+      tags:
+      - client-price
+      summary: Получить цены номенклатуры по соглашениям.
+      description: |
+        Получить цены номенклатуры по соглашениям.
+      operationId: client-price-get
+      requestBody:
+        description: JSON запроса цен номенклатур клиента по соглашениям.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientPriceRequest'
+        required: true
+      responses:
+        "200":
+          description: OK.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ClientPriceResponse'
         default:
           description: Server error.
 components:
@@ -299,6 +327,34 @@ components:
           nullable: true
           items:
             $ref: '#/components/schemas/OrderSnapshotEvent'
+    ClientPriceRequest:
+      required:
+      - agreements
+      - client
+      type: object
+      properties:
+        client:
+          type: string
+          description: UUID Клиента (Партнёр в 1С)
+          format: uuid
+        agreements:
+          type: array
+          items:
+            type: string
+            description: UUID соглашения
+            format: uuid
+        fromDate:
+          type: string
+          description: "Фильтрующая дата последнего обновления цен, может быть не\
+            \ указана, тогда, будут получены все цены."
+          format: date-time
+    ClientPriceResponse:
+      type: object
+      properties:
+        status:
+          $ref: '#/components/schemas/Status'
+        data:
+          $ref: '#/components/schemas/ClientPriceResponse_data'
     OrderProduct_discount:
       type: object
       properties:
@@ -306,3 +362,29 @@ components:
           $ref: '#/components/schemas/ProductDiscount'
         manual:
           $ref: '#/components/schemas/ProductDiscount'
+    ClientPriceResponse_data_PricesByAgreements:
+      type: object
+      properties:
+        price:
+          type: integer
+          description: Цена позации номенклатуры для клиента
+        agreement:
+          type: string
+          description: UUID соглашения
+          format: uuid
+        nomenclature:
+          type: string
+          description: Уникальный идентификатор номенклатуры
+          format: uuid
+    ClientPriceResponse_data:
+      type: object
+      properties:
+        client:
+          type: string
+          description: UUID Клиента (Партнёр в 1С)
+          format: uuid
+        PricesByAgreements:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClientPriceResponse_data_PricesByAgreements'
+      nullable: true
